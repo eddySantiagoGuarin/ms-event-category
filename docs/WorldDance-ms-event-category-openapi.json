@@ -1,0 +1,41 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "WorldDance-ms-event-category",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v2/events/create": {
+      "post": {
+        "summary": "peticion para crear evento",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        },
+        "operationId": "peticion_para_crear_evento",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "ownerId": 1,
+                "name": "Festival de Salsa de Prueba_2",
+                "description": "Una descripción de prueba",
+                "startDate": "2026-07-16T19:00:00",
+                "endDate": "2026-07-16T23:00:00",
+                "location": "Cali",
+                "status": "ACTIVE"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9091"
+    }
+  ]
+}
