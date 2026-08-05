@@ -1,8 +1,12 @@
 package com.world_dance.ms_event_category.controller;
 
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,6 +68,23 @@ public class ModalityController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 
+    }
+
+
+   @GetMapping("/getModalitiesByEventId/{eventId}")
+    public ResponseEntity<HttpGlobalResponse<List<ModalityResponseDto>>> getModalitiesByEventId(@PathVariable Long eventId) {
+        try {
+            List<ModalityResponseDto> response = modalityService.getModalitiesByEventId(eventId);
+            HttpGlobalResponse<List<ModalityResponseDto>> globalResponse = new HttpGlobalResponse<>();
+            globalResponse.setData(response);
+            globalResponse.setMessage("Modalidades obtenidas con éxito.");
+            
+            return ResponseEntity.status(HttpStatus.OK).body(globalResponse);
+        } catch (Exception e) {
+            HttpGlobalResponse<List<ModalityResponseDto>> errorResponse = new HttpGlobalResponse<>();
+            errorResponse.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
 
 }
