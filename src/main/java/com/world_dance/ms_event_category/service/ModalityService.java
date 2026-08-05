@@ -1,5 +1,7 @@
 package com.world_dance.ms_event_category.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.world_dance.wd_lib_common.dto.HttpGlobalResponse;
@@ -76,7 +78,7 @@ public class ModalityService {
         modalityRepository.save(modality);
 
         ModalityResponseDto modalityResponseDto = new ModalityResponseDto();
-
+        
         modalityResponseDto.setCategory(modality.getCategory());
         modalityResponseDto.setDivision(modality.getDivision());
         modalityResponseDto.setMinAge(modality.getMinAge());
@@ -101,6 +103,28 @@ public class ModalityService {
         response.setMessage("categoria eliminada con exito");
 
         return response ;
+    }
+
+    public List<ModalityResponseDto> getModalitiesByEventId(Long eventId) {
+    List<Modality> modalities = modalityRepository.findByEventId(eventId);
+    
+    if (modalities.isEmpty()) {
+        throw new RuntimeException("No se encontraron modalidades registradas para el evento con ID: " + eventId);
+    }
+    
+    List<ModalityResponseDto> listModality = modalities.stream().map(modality -> {
+        ModalityResponseDto modalityResponseDto = new ModalityResponseDto();
+        modalityResponseDto.setId(modality.getId());
+        modalityResponseDto.setEventId(modality.getEventId());
+        modalityResponseDto.setCategory(modality.getCategory());
+        modalityResponseDto.setDivision(modality.getDivision());
+        modalityResponseDto.setMinAge(modality.getMinAge());
+        modalityResponseDto.setMaxAge(modality.getMaxAge());
+        modalityResponseDto.setStyle(modality.getStyle());
+        return modalityResponseDto;
+    }).toList();
+    
+        return listModality;
     }
 
 }

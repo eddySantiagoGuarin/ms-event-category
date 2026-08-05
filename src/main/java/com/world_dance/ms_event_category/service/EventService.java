@@ -2,6 +2,8 @@ package com.world_dance.ms_event_category.service;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -121,5 +123,30 @@ public class EventService {
         }
         return response ;
     }
+
+    
+   public List<EventResponseDto> getEvents() {
+    List<Event> events = eventRepository.findAll();
+    List<EventResponseDto> listEvent = new ArrayList<>();
+    
+    for (Event event : events) {
+        EventResponseDto eventResponseDto = new EventResponseDto();
+        
+       
+        eventResponseDto.setIdEvent(event.getId()); 
+        eventResponseDto.setOwnerId(event.getOwnerId());
+        eventResponseDto.setName(event.getName());
+        eventResponseDto.setDescription(event.getDescription());
+        eventResponseDto.setStartDate(event.getStartDate() != null ? event.getStartDate().toString() : null);
+        eventResponseDto.setEndDate(event.getEndDate() != null ? event.getEndDate().toString() : null);
+        eventResponseDto.setLocation(event.getLocation());
+        eventResponseDto.setStatus(event.getStatus());
+        
+        listEvent.add(eventResponseDto);
+    }
+    
+    return listEvent;
+    }
+    
 
 }

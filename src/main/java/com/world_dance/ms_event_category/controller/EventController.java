@@ -1,8 +1,11 @@
 package com.world_dance.ms_event_category.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,4 +69,22 @@ public class EventController {
         }
 
     }
+
+
+    @GetMapping("/getEvents")
+    public ResponseEntity<HttpGlobalResponse<List<EventResponseDto>>> getEvents() {
+        try {
+            List<EventResponseDto> response = eventService.getEvents();
+            HttpGlobalResponse<List<EventResponseDto>> globalResponse = new HttpGlobalResponse<>();
+            globalResponse.setData(response);
+            globalResponse.setMessage("Eventos obtenidos con éxito.");
+            
+            return ResponseEntity.status(HttpStatus.OK).body(globalResponse);
+        } catch (Exception e) {
+            HttpGlobalResponse<List<EventResponseDto>> errorResponse = new HttpGlobalResponse<>();
+            errorResponse.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+    }
+
 }
