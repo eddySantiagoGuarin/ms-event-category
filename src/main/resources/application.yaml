@@ -6,7 +6,12 @@ spring:
     consul:
       host: ${URL_CONSUL:localhost}
       port: ${PORT_CONSUL:8500}
-      
+      discovery:
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        instance-id: ${spring.application.name}:${random.value}
+        prefer-ip-address: true
+
   datasource:
       url: jdbc:mysql://localhost:3306/world_dance_events_modality
       username: root
