@@ -13,13 +13,14 @@ import com.world_dance.wd_lib_common.dto.HttpGlobalResponse;
 import com.world_dance.wd_lib_common.entity.Event;
 import com.world_dance.wd_lib_common.repository.EventRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository eventRepository;
+
+    public EventService(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
 
 
     public HttpGlobalResponse<EventResponseDto> createEvent(EventRequestDto request){

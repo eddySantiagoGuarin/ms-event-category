@@ -14,12 +14,18 @@ import com.world_dance.wd_lib_common.repository.ModalityRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class ModalityService {
-    
+
     private final ModalityRepository modalityRepository ;
 
     private final EventRepository eventRepository ;
+
+    public ModalityService(ModalityRepository modalityRepository, EventRepository eventRepository) {
+        this.modalityRepository = modalityRepository;
+        this.eventRepository = eventRepository;
+    }
+    
+    
 
     public HttpGlobalResponse<ModalityResponseDto> createModality(ModalityRequestDto request, Long eventId){
 

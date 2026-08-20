@@ -21,14 +21,16 @@ import com.world_dance.wd_lib_common.dto.ModalityRequestDto;
 import com.world_dance.wd_lib_common.dto.ModalityResponseDto;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/modality")
 public class ModalityController {
     
     private final ModalityService modalityService ;
+
+    public ModalityController(ModalityService modalityService) {
+        this.modalityService = modalityService;
+    }
 
     @PostMapping("/create/{eventId}")
     public ResponseEntity<HttpGlobalResponse<ModalityResponseDto>> createModality (@Valid @RequestBody ModalityRequestDto request, @PathVariable Long eventId ){

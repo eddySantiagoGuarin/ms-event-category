@@ -19,14 +19,16 @@ import com.world_dance.wd_lib_common.dto.EventResponseDto;
 import com.world_dance.wd_lib_common.dto.HttpGlobalResponse;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/events")
 public class EventController {
     
     private final EventService eventService;
+
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<HttpGlobalResponse<EventResponseDto>> createEvent(@Valid @RequestBody EventRequestDto request){
