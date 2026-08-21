@@ -2,23 +2,23 @@ spring:
   application:
     name: ms-event-category
   datasource:
-    url: jdbc:mysql://localhost:3306/world_dance_events_modality
-    username: root
-    password: admin
+    url: "${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3307/world_dance_events_modality}"
+    username: "${SPRING_DATASOURCE_USERNAME:root}"
+    password: "${SPRING_DATASOURCE_PASSWORD:admin}"
     driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     consul:
-      host: localhost
-      port: 8500
+      host: "${SPRING_CLOUD_CONSUL_HOST:consul}"
+      port: "${SPRING_CLOUD_CONSUL_PORT:8500}"
       discovery:
         health-check-path: /api/v1/actuator/health
         health-check-interval: 10s
-        instance-id: ${spring.application.name}:${random.value}
-        prefer-ip-address: true
+        instance-id: "${spring.application.name}:${random.value}"
+        prefer-ip-address: false # Permite que Consul lo resuelva por nombre de red Docker
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -30,16 +30,20 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include:
+          - health
+          - info
   endpoint:
     health:
       show-details: always
-
+  health:
+    mongodb:
+      enabled: false
 server:
-  port: 9091
+  port: 9092
   servlet:
     context-path: /api/v1
 
 security:
   jwt:
-    secret-key: ${JWT_SECRET:F0bVQgRnuk6DRxooVWKaG0ndlgqEeI/4YXObXeOaR2Q=}
+    secret-key: "${JWT_SECRET:F0bVQgRnuk6DRxooVWKaG0ndlgqEeI/4YXObXeOaR2Q=}"
