@@ -8,6 +8,7 @@ import com.world_dance.wd_lib_common.dto.HttpGlobalResponse;
 import com.world_dance.wd_lib_common.dto.ModalityRequestDto;
 import com.world_dance.wd_lib_common.dto.ModalityResponseDto;
 import com.world_dance.wd_lib_common.entity.Modality;
+import com.world_dance.wd_lib_common.enums.Category;
 import com.world_dance.wd_lib_common.repository.EventRepository;
 import com.world_dance.wd_lib_common.repository.ModalityRepository;
 
@@ -126,5 +127,21 @@ public class ModalityService {
     
         return listModality;
     }
+
+    public List<ModalityResponseDto> getModalitiesByCategory(Category category) {
+    List<Modality> modalities = modalityRepository.findByCategory(category);
+
+    return modalities.stream().map(modality -> {
+        ModalityResponseDto dto = new ModalityResponseDto();
+        dto.setId(modality.getId());
+        dto.setEventId(modality.getEventId());
+        dto.setCategory(modality.getCategory());
+        dto.setDivision(modality.getDivision());
+        dto.setMinAge(modality.getMinAge());
+        dto.setMaxAge(modality.getMaxAge());
+        dto.setStyle(modality.getStyle());
+        return dto;
+    }).toList();
+}
 
 }
