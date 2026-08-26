@@ -1,6 +1,5 @@
 package com.world_dance.ms_event_category.service;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,26 +20,25 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
+    public HttpGlobalResponse<EventResponseDto> createEvent(EventRequestDto request) {
+        HttpGlobalResponse<EventResponseDto> response = new HttpGlobalResponse<>();
 
-    public HttpGlobalResponse<EventResponseDto> createEvent(EventRequestDto request){
-       HttpGlobalResponse<EventResponseDto> response = new HttpGlobalResponse<>();
-        
         Event event = new Event();
-        
-        if(eventRepository.existsByName(request.getName()) ){
+
+        if (eventRepository.existsByName(request.getName())) {
             throw new RuntimeException("El nombre del evento ya se encuentra registrado.");
         }
 
         LocalDateTime fechaActual = LocalDateTime.now();
-        
-        if(request.getStartDate().isBefore(fechaActual)){
+
+        if (request.getStartDate().isBefore(fechaActual)) {
             throw new RuntimeException("La fecha de inicio no puede ser anterior a la fecha actual.");
         }
-            
-        if(request.getEndDate().isBefore(request.getStartDate())){
+
+        if (request.getEndDate().isBefore(request.getStartDate())) {
             throw new RuntimeException("La fecha de finalizacion no puede ser anterior a la fecha de inicio.");
         }
-        
+
         event.setOwnerId(request.getOwnerId());
         event.setName(request.getName());
         event.setDescription(request.getDescription());
@@ -48,7 +46,7 @@ public class EventService {
         event.setEndDate(request.getEndDate());
         event.setLocation(request.getLocation());
         event.setStatus(request.getStatus());
-        
+
         eventRepository.save(event);
 
         EventResponseDto data = new EventResponseDto();
@@ -60,20 +58,20 @@ public class EventService {
         data.setLocation(event.getLocation());
         data.setStatus(event.getStatus());
         data.setMessage("El evento fue creado de manera exitosa.");
-        
+
         response.setData(data);
         response.setMessage(data.getMessage());
 
         return response;
     }
 
-    public HttpGlobalResponse<EventResponseDto> updateEvent (String nameEvent, EventRequestDto eventRequestDto){
+    public HttpGlobalResponse<EventResponseDto> updateEvent(String nameEvent, EventRequestDto eventRequestDto) {
 
         Event event = eventRepository.findByName(nameEvent);
-        
+
         HttpGlobalResponse<EventResponseDto> response = new HttpGlobalResponse<>();
-        
-        if(event == null){
+
+        if (event == null) {
             response.setMessage("Evento no encontrado por el nombre: " + nameEvent);
             return response;
         }
@@ -84,7 +82,7 @@ public class EventService {
         event.setEndDate(eventRequestDto.getEndDate());
         event.setLocation(eventRequestDto.getLocation());
         event.setStatus(eventRequestDto.getStatus());
-        
+
         eventRepository.save(event);
 
         EventResponseDto eventResponseDto = new EventResponseDto();
@@ -99,54 +97,72 @@ public class EventService {
 
         response.setData(eventResponseDto);
         response.setMessage("Evento actualizado con exito.");
-        
+
         return response;
 
     }
 
-
-    public HttpGlobalResponse<?> deleteEvent (long eventId, Long ownerId){
+    public HttpGlobalResponse<?> deleteEvent(long eventId, Long ownerId) {
 
         Event event = eventRepository.findById(eventId);
         LocalDateTime fechaActual = LocalDateTime.now();
         HttpGlobalResponse<?> response = new HttpGlobalResponse<>();
 
-        if(event.getStartDate().isEqual( fechaActual) && event.getEndDate().isAfter(fechaActual)){  
+        if (event.getStartDate().isEqual(fechaActual) && event.getEndDate().isAfter(fechaActual)) {
             response.setMessage("Este evento no se puede eliminar debido a que ya inicio");
         }
 
-        if(event.getOwnerId().equals(ownerId)){
+        if (event.getOwnerId().equals(ownerId)) {
             eventRepository.deleteById(event.getId());
             response.setMessage("Evento eliminado con exito.");
-        }else{
+        } else {
             response.setMessage("No tienes permiso de eliminar este evento.");
         }
-        return response ;
+        return response;
     }
 
-    
-   public List<EventResponseDto> getEvents() {
-    List<Event> events = eventRepository.findAll();
-    List<EventResponseDto> listEvent = new ArrayList<>();
-    
-    for (Event event : events) {
-        EventResponseDto eventResponseDto = new EventResponseDto();
-        
-       
-        eventResponseDto.setIdEvent(event.getId()); 
-        eventResponseDto.setOwnerId(event.getOwnerId());
-        eventResponseDto.setName(event.getName());
-        eventResponseDto.setDescription(event.getDescription());
-        eventResponseDto.setStartDate(event.getStartDate() != null ? event.getStartDate().toString() : null);
-        eventResponseDto.setEndDate(event.getEndDate() != null ? event.getEndDate().toString() : null);
-        eventResponseDto.setLocation(event.getLocation());
-        eventResponseDto.setStatus(event.getStatus());
-        
-        listEvent.add(eventResponseDto);
-    }
-    
-    return listEvent;
-    }
-    
+    public List<EventResponseDto> getEvents() {
+        List<Event> events = eventRepository.findAll();
+        List<EventResponseDto> listEvent = new ArrayList<>();
 
+        for (Event event : events) {
+            EventResponseDto eventResponseDto = new EventResponseDto();
+
+            eventResponseDto.setIdEvent(event.getId());
+            eventResponseDto.setOwnerId(event.getOwnerId());
+            eventResponseDto.setName(event.getName());
+            eventResponseDto.setDescription(event.getDescription());
+            eventResponseDto.setStartDate(event.getStartDate() != null ? event.getStartDate().toString() : null);
+            eventResponseDto.setEndDate(event.getEndDate() != null ? event.getEndDate().toString() : null);
+            eventResponseDto.setLocation(event.getLocation());
+            eventResponseDto.setStatus(event.getStatus());
+
+            listEvent.add(eventResponseDto);
+        }
+
+        return listEvent;
+    }
+
+    public HttpGlobalResponse<EventResponseDto> getEventById(long eventId) {
+        Event event = eventRepository.findById(eventId);
+
+        if (event == null) {
+            throw new RuntimeException("Evento no encontrado con ID: " + eventId);
+        }
+
+        EventResponseDto dto = new EventResponseDto();
+        dto.setIdEvent(event.getId());
+        dto.setOwnerId(event.getOwnerId());
+        dto.setName(event.getName());
+        dto.setDescription(event.getDescription());
+        dto.setStartDate(event.getStartDate() != null ? event.getStartDate().toString() : null);
+        dto.setEndDate(event.getEndDate() != null ? event.getEndDate().toString() : null);
+        dto.setLocation(event.getLocation());
+        dto.setStatus(event.getStatus());
+
+        HttpGlobalResponse<EventResponseDto> response = new HttpGlobalResponse<>();
+        response.setData(dto);
+        response.setMessage("Evento obtenido con éxito.");
+        return response;
+    }
 }
