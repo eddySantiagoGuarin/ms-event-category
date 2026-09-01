@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/events")
 public class EventController {
-    
+
     private final EventService eventService;
 
     @PostMapping("/create")
@@ -75,7 +75,6 @@ public class EventController {
         }
     }
 
-
     @GetMapping("/getEvents")
     public ResponseEntity<HttpGlobalResponse<List<EventResponseDto>>> getEvents() {
         try {
@@ -83,7 +82,7 @@ public class EventController {
             HttpGlobalResponse<List<EventResponseDto>> globalResponse = new HttpGlobalResponse<>();
             globalResponse.setData(response);
             globalResponse.setMessage("Eventos obtenidos con éxito.");
-            
+
             return ResponseEntity.status(HttpStatus.OK).body(globalResponse);
         } catch (Exception e) {
             HttpGlobalResponse<List<EventResponseDto>> errorResponse = new HttpGlobalResponse<>();
@@ -91,5 +90,7 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
+
+   
 
 }

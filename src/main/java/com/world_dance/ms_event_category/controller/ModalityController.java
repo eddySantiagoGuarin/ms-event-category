@@ -1,6 +1,5 @@
 package com.world_dance.ms_event_category.controller;
 
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -28,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/modality")
 public class ModalityController {
-    
-    private final ModalityService modalityService ;
+
+    private final ModalityService modalityService;
 
     @PostMapping("/create/{eventId}")
     public ResponseEntity<HttpGlobalResponse<ModalityResponseDto>> createModality(
@@ -76,15 +75,15 @@ public class ModalityController {
         }
     }
 
-
-   @GetMapping("/getModalitiesByEventId/{eventId}")
-    public ResponseEntity<HttpGlobalResponse<List<ModalityResponseDto>>> getModalitiesByEventId(@PathVariable Long eventId) {
+    @GetMapping("/getModalitiesByEventId/{eventId}")
+    public ResponseEntity<HttpGlobalResponse<List<ModalityResponseDto>>> getModalitiesByEventId(
+            @PathVariable Long eventId) {
         try {
             List<ModalityResponseDto> response = modalityService.getModalitiesByEventId(eventId);
             HttpGlobalResponse<List<ModalityResponseDto>> globalResponse = new HttpGlobalResponse<>();
             globalResponse.setData(response);
             globalResponse.setMessage("Modalidades obtenidas con éxito.");
-            
+
             return ResponseEntity.status(HttpStatus.OK).body(globalResponse);
         } catch (Exception e) {
             HttpGlobalResponse<List<ModalityResponseDto>> errorResponse = new HttpGlobalResponse<>();
@@ -93,4 +92,5 @@ public class ModalityController {
         }
     }
 
+   
 }
