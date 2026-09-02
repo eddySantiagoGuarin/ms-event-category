@@ -2,7 +2,7 @@ spring:
   application:
     name: ms-event-category
   datasource:
-    url: "${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3307/world_dance_events_modality}"
+    url: "${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/world_dance_events_modality}"
     username: "${SPRING_DATASOURCE_USERNAME:root}"
     password: "${SPRING_DATASOURCE_PASSWORD:admin}"
     driver-class-name: com.mysql.cj.jdbc.Driver
