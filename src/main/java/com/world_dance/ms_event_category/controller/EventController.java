@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,47 +31,48 @@ public class EventController {
 
     @PostMapping("/create")
     public ResponseEntity<HttpGlobalResponse<EventResponseDto>> createEvent(
+            @RequestHeader(value = "X-User-Id", required = false) Long authenticatedUserId,
             @Valid @RequestBody EventRequestDto request) {
 
         try {
-            HttpGlobalResponse<EventResponseDto> response = eventService.createEvent(request);
+            HttpGlobalResponse<EventResponseDto> response = eventService.createEvent(request, authenticatedUserId);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             HttpGlobalResponse<EventResponseDto> errorResponse = new HttpGlobalResponse<>();
             errorResponse.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<HttpGlobalResponse<EventResponseDto>> updateEvent(@RequestParam("nameEvent") String nameEvent,
+    public ResponseEntity<HttpGlobalResponse<EventResponseDto>> updateEvent(
+            @RequestHeader(value = "X-User-Id", required = false) Long authenticatedUserId,
+            @RequestParam("nameEvent") String nameEvent,
             @Valid @RequestBody EventRequestDto request) {
 
         try {
-            HttpGlobalResponse<EventResponseDto> response = eventService.updateEvent(nameEvent, request);
+            HttpGlobalResponse<EventResponseDto> response = eventService.updateEvent(nameEvent, request, authenticatedUserId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             HttpGlobalResponse<EventResponseDto> errorResponse = new HttpGlobalResponse<>();
             errorResponse.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<HttpGlobalResponse<?>> deleteEvent(@RequestParam("eventId") long eventId,
-            @RequestParam("ownerId") long ownerId) {
+    public ResponseEntity<HttpGlobalResponse<?>> deleteEvent(
+            @RequestHeader(value = "X-User-Id", required = false) Long authenticatedUserId,
+            @RequestParam("eventId") long eventId) {
 
         try {
-            HttpGlobalResponse<?> response = eventService.deleteEvent(eventId, ownerId);
+            HttpGlobalResponse<?> response = eventService.deleteEvent(eventId, authenticatedUserId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             HttpGlobalResponse<EventResponseDto> errorResponse = new HttpGlobalResponse<>();
             errorResponse.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-
     }
 
     @GetMapping("/getEvents")
@@ -90,16 +91,6 @@ public class EventController {
         }
     }
 
-    @GetMapping("/{eventId}")
-    public ResponseEntity<HttpGlobalResponse<EventResponseDto>> getEventById(@PathVariable Long eventId) {
-        try {
-            HttpGlobalResponse<EventResponseDto> response = eventService.getEventById(eventId);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            HttpGlobalResponse<EventResponseDto> errorResponse = new HttpGlobalResponse<>();
-            errorResponse.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        }
-    }
+   
 
 }
