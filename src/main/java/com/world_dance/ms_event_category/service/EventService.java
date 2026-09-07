@@ -159,6 +159,24 @@ public class EventService {
         return listEvent;
     }
 
-   
+    public HttpGlobalResponse<EventResponseDto> getEventById(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Evento no encontrado con id: " + eventId));
+
+        EventResponseDto data = new EventResponseDto();
+        data.setIdEvent(event.getId());
+        data.setOwnerId(event.getOwnerId());
+        data.setName(event.getName());
+        data.setDescription(event.getDescription());
+        data.setStartDate(event.getStartDate() != null ? event.getStartDate().toString() : null);
+        data.setEndDate(event.getEndDate() != null ? event.getEndDate().toString() : null);
+        data.setLocation(event.getLocation());
+        data.setStatus(event.getStatus());
+
+        HttpGlobalResponse<EventResponseDto> response = new HttpGlobalResponse<>();
+        response.setData(data);
+        response.setMessage("Evento obtenido con éxito.");
+        return response;
+    }
 }
 
