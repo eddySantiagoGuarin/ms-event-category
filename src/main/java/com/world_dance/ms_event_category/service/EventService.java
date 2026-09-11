@@ -55,6 +55,7 @@ public class EventService {
         eventRepository.save(event);
 
         EventResponseDto data = new EventResponseDto();
+        data.setIdEvent(event.getId());
         data.setOwnerId(event.getOwnerId());
         data.setName(event.getName());
         data.setDescription(event.getDescription());
@@ -97,6 +98,7 @@ public class EventService {
         eventRepository.save(event);
 
         EventResponseDto eventResponseDto = new EventResponseDto();
+        eventResponseDto.setIdEvent(event.getId());
         eventResponseDto.setOwnerId(event.getOwnerId());
         eventResponseDto.setName(event.getName());
         eventResponseDto.setDescription(event.getDescription());
