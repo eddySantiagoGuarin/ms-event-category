@@ -10,6 +10,7 @@ import com.world_dance.wd_lib_common.dto.ModalityRequestDto;
 import com.world_dance.wd_lib_common.dto.ModalityResponseDto;
 import com.world_dance.wd_lib_common.entity.Event;
 import com.world_dance.wd_lib_common.entity.Modality;
+import com.world_dance.wd_lib_common.enums.Category;
 import com.world_dance.wd_lib_common.repository.EventRepository;
 import com.world_dance.wd_lib_common.repository.ModalityRepository;
 
@@ -155,6 +156,22 @@ public class ModalityService {
         if (modalities.isEmpty()) {
             throw new RuntimeException("No se encontraron modalidades registradas para el evento con ID: " + eventId);
         }
+
+        return modalities.stream().map(modality -> {
+            ModalityResponseDto modalityResponseDto = new ModalityResponseDto();
+            modalityResponseDto.setId(modality.getId());
+            modalityResponseDto.setEventId(modality.getEventId());
+            modalityResponseDto.setCategory(modality.getCategory());
+            modalityResponseDto.setDivision(modality.getDivision());
+            modalityResponseDto.setMinAge(modality.getMinAge());
+            modalityResponseDto.setMaxAge(modality.getMaxAge());
+            modalityResponseDto.setStyle(modality.getStyle());
+            return modalityResponseDto;
+        }).toList();
+    }
+
+    public List<ModalityResponseDto> getModalitiesByCategory(Category category) {
+        List<Modality> modalities = modalityRepository.findByCategory(category);
 
         return modalities.stream().map(modality -> {
             ModalityResponseDto modalityResponseDto = new ModalityResponseDto();
