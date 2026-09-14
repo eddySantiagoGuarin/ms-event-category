@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.world_dance.ms_event_category.dto.PageResponseDto;
 import com.world_dance.ms_event_category.service.EventService;
 import com.world_dance.wd_lib_common.dto.EventRequestDto;
 import com.world_dance.wd_lib_common.dto.EventResponseDto;
@@ -104,6 +105,26 @@ public class EventController {
         }
     }
 
-   
+    /**
+     * Listado paginado (catálogo público + "Mis Eventos" con tabs Todos/Activos/Borradores).
+     * filter: ALL | ACTIVE | INACTIVE (por defecto ALL).
+     */
+    @GetMapping("/page")
+    public ResponseEntity<HttpGlobalResponse<PageResponseDto<EventResponseDto>>> getEventsPage(
+            @RequestHeader(value = "X-User-Id", required = false) Long authenticatedUserId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size,
+            @RequestParam(defaultValue = "ALL") String filter) {
+
+        try {
+            HttpGlobalResponse<PageResponseDto<EventResponseDto>> response =
+                    eventService.getEventsPage(page, size, filter, authenticatedUserId);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            HttpGlobalResponse<PageResponseDto<EventResponseDto>> errorResponse = new HttpGlobalResponse<>();
+            errorResponse.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+    }
 
 }
