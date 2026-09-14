@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.world_dance.ms_event_category.service.ModalityService;
+import com.world_dance.wd_lib_common.enums.Category;
 import com.world_dance.wd_lib_common.dto.EventResponseDto;
 import com.world_dance.wd_lib_common.dto.HttpGlobalResponse;
 import com.world_dance.wd_lib_common.dto.ModalityRequestDto;
@@ -92,5 +93,21 @@ public class ModalityController {
         }
     }
 
+    @GetMapping("/getModalitiesByCategory/{category}")
+    public ResponseEntity<HttpGlobalResponse<List<ModalityResponseDto>>> getModalitiesByCategory(
+            @PathVariable Category category) {
+        try {
+            List<ModalityResponseDto> response = modalityService.getModalitiesByCategory(category);
+            HttpGlobalResponse<List<ModalityResponseDto>> globalResponse = new HttpGlobalResponse<>();
+            globalResponse.setData(response);
+            globalResponse.setMessage("Modalidades obtenidas con éxito.");
+
+            return ResponseEntity.status(HttpStatus.OK).body(globalResponse);
+        } catch (Exception e) {
+            HttpGlobalResponse<List<ModalityResponseDto>> errorResponse = new HttpGlobalResponse<>();
+            errorResponse.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+    }
    
 }
