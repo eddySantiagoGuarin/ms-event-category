@@ -167,11 +167,7 @@ public class EventService {
      * Listado paginado para optimizar la carga del catálogo de eventos.
      * - filter "ACTIVE": solo eventos activos (catálogo público).
      * - filter "INACTIVE": solo los eventos propios que no estén activos ("Mis Eventos" > Borradores/Inactivos).
-<<<<<<< Updated upstream
      * - filter "MINE": todos los eventos propios, sin importar estado ("Mis Eventos").
-=======
-     * - filter "MINE": SOLO los eventos cuyo ownerId sea el del usuario autenticado (sin importar estado).
->>>>>>> Stashed changes
      * - cualquier otro valor ("ALL"): activos de cualquiera + todos los propios ("Mis Eventos" > Todos).
      * Sin usuario autenticado, siempre se limita a eventos activos (catálogo público).
      */
