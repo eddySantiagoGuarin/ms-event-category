@@ -153,9 +153,6 @@ public class ModalityService {
     public List<ModalityResponseDto> getModalitiesByEventId(Long eventId) {
         List<Modality> modalities = modalityRepository.findByEventId(eventId);
 
-        if (modalities.isEmpty()) {
-            throw new RuntimeException("No se encontraron modalidades registradas para el evento con ID: " + eventId);
-        }
 
         return modalities.stream().map(modality -> {
             ModalityResponseDto modalityResponseDto = new ModalityResponseDto();

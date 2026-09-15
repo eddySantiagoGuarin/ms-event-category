@@ -106,13 +106,8 @@ public class EventController {
     }
 
     /**
-<<<<<<< Updated upstream
      * Listado paginado (catálogo público + "Mis Eventos" con tabs Todos/Activos/Borradores).
      * filter: ALL | ACTIVE | INACTIVE (por defecto ALL).
-=======
-     * Listado paginado (catálogo público + "Mis Eventos" con tabs Todos/Mis Eventos/Activos/Borradores).
-     * filter: ALL | ACTIVE | INACTIVE | MINE (por defecto ALL).
->>>>>>> Stashed changes
      */
     @GetMapping("/page")
     public ResponseEntity<HttpGlobalResponse<PageResponseDto<EventResponseDto>>> getEventsPage(
